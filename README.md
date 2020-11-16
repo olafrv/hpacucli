@@ -1,4 +1,4 @@
-WARNING: You must install the new HP MANAGMENT COMPONENT PACK FOR PROLIANT to use this scripts (see details below)
+**WARNING**: You must install the new HP MANAGMENT COMPONENT PACK FOR PROLIANT to use this scripts (see details below)
 
 The bellow hpacucli-check.sh is a bash shell script that checks the status of controller, array, logical and physical driver
 on a HP Server with the command hpaculi (HP Array Configuration Utility Client) installed, also syslogging and sending an
@@ -28,3 +28,5 @@ The HP MCP includes:
 * hpacucli: HP Command Line Array Configuration Utility
 * cpqacuxe: HP Array Configuration Utility
 * hp-ams: HP Agentless Management Service
+
+This is an improved version from the previus script, test for 6 months in HP Proliant G4, G5, G6 and G7 Servers with GNU/Linux Debian 6/7, who where migrated from use HP SPP to HP MCP, for more information about this procedure in Debian look at: https://wiki.debian.org/HP/ProLiant
