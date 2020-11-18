@@ -203,9 +203,9 @@ fi
 if  $ERROR_FOUND
 then
 	$SSACLI ctrl all show config detail >> $FILE_EMAIL
-	echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : ERRORS detected on `hostname`" maurocali01@gmail.com
+	echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : ERRORS detected on `hostname`" specify_your_email_here@mail.com
 else
 	$SSACLI ctrl all show config detail >> $FILE_EMAIL
-        echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : OK on `hostname`" maurocali01@gmail.com
+        echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : OK on `hostname`" specify_your_email_here@mail.com
 fi
 deleteTmpFiles
