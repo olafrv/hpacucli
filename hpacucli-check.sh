@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###
-# FILE:	ssacli-check.sh (03-Dec-2013)
+# FILE:	hpacucli-check.sh (03-Dec-2013)
 # LICENSE: GNU/GPL v3.0
 # AUTHOR:  Olaf Reitmaier Veracierta <olafrv@gmail.com>
 # USAGE:   Check the status of the logical drives on a HP Server
@@ -11,6 +11,7 @@
 SSACLI=/usr/sbin/ssacli
 SSACLI_TMP=/tmp/ssacli.log
 ERROR_FOUND=false
+MAIL=destination_email_address_here
  
 # Debugging?, just pass debug as first parameter.
 if [ -z "$1" ]
@@ -26,11 +27,28 @@ fi
 # http://h20566.www2.hp.com/portal/site/hpsc/template.PAGE/public/kb/docDisplay/?sp4ts.oid=3924066&spf_p.tpst=kbDocDisplay&spf_p.prp_kbDocDisplay=wsrp-navigationalState%3DdocId%253Demr_na-c03676138-1%257CdocLocale%253D%257CcalledBy%253D&javax.portlet.begCacheTok=com.vignette.cachetoken&javax.portlet.endCacheTok=com.vignette.cachetoken
 # ADVISORY: Linux - HP Array Configuration Utility CLI for Linux (Hpacucli) Version 9.00 (Or Later) Is Delayed in Responding if Storage That Is Not Connected to Local Smart Array Controller Is Configured With Multiple LUNs
 # DESCRIPTION: There may be a delay starting the HP Array Configuration Utility CLI for Linux (ssacli) Version 9.00 (or later) on an HP ProLiant server configured to detect multiple LUNs connected via Fibre or iSCSI storage. In addition, there may be times that certain commands will delay in operating. This occurs because functionality was added to the ACU to discover HP branded Solid State Drives (SSD) that are not connected to the HP Smart Array controllers.
-# SCOPE: Any HP ProLiant server running the HP Array Configuration Utility CLI for Linux (ssacli) Version 9.00 (or later) configured to detect multiple LUNs connected via Fibre or iSCSI storage. As a workaround, to prevent the delay from occurring when accessing local storage, type the following command:
+# SCOPE: Any HP ProLiant server running the HP Array Configuration Utility CLI for Linux (ssacli) Version 9.00 (or later) configured to detect multiple LUNs connected via Fibre or iSCSI storage.
+# RESOLUTION : To prevent the delay from occurring when accessing local storage, type the following command:
 # export INFOMGR_BYPASS_NONSA=1
 # To re-enable the feature non-smart array device scanning, type the following command.
 # export -n INFOMGR_BYPASS_NONSA
-export INFOMGR_BYPASS_NONSA=1
+# Or use hpssacli version 2.0-23.0 (or later) which is the purpose of this updated script.
+###########################################################################################
+# HPE Smart Storage Administrator (HPE SSA) CLI for Linux 64-bits
+# The HPE Smart Storage Administrator CLI (HPE SSACLI) is a commandline-based disk configuration 
+# program that helps you configure, manage, diagnose, and monitor HPE ProLiant Smart Array Controllers 
+# and now other storage devices as well, such as host bus adapters (HBAs), HPE Storage controllers, 
+# and future devices such as SCSI Express drives, and SAS switch devices. HPE SSACLI replaces 
+# the existing HP Array Configuration CLI Utility, or ACUCLI, with an updated design and will deliver 
+# new features and functionality for various Smart Storage initiatives as they come online. 
+# HPE Smart Array Advanced Pack 1.0 and 2.0 features are now part of the baseline features of HPE SSACLI,
+# with the appropriate firmware. HPE SSACLI will allow you to configure and manage your storage as before, 
+# but now with additional features, abilities, and supported devices. Existing ACUCLI scripts should only 
+# need to make minimal changes such as calling the appropriate binary or executable in order to maintain 
+# compatibility. HPE SSASCRIPTING - Scripting can be performed in offline or online environments. 
+# The HPE SSA Scripting application has 2 scripting modes – Capture and Input.
+############################################################################################
+# export INFOMGR_BYPASS_NONSA=1 // not required anymore using ssacli
 ##
  
 # Clean temp files
@@ -203,9 +221,9 @@ fi
 if  $ERROR_FOUND
 then
 	$SSACLI ctrl all show config detail >> $FILE_EMAIL
-	echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : ERRORS detected on `hostname`" specify_your_email_here@mail.com
+	echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : ERRORS detected on `hostname`" $MAIL
 else
 	$SSACLI ctrl all show config detail >> $FILE_EMAIL
-        echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : OK on `hostname`" specify_your_email_here@mail.com
+        echo "$(cat $FILE_EMAIL)" | mail -s "RAID Report : OK on `hostname`" $MAIL
 fi
 deleteTmpFiles
