@@ -214,7 +214,7 @@ done < $FILE_SLOT
  
 if [ $ERROR_NOSLOT -eq 1 ]
 then
-	msg="[ERROR] No RAID controller (slot) detected" | mail -s "RAID Report : No Raid Controller found on `hostname`" maurocali01@gmail.com
+	msg="[ERROR] No RAID controller (slot) detected" | mail -s "RAID Report : No Raid Controller found on `hostname`" $MAIL
 	doLog "$slot" "$msg" "alert" $DEBUG
 fi
 
